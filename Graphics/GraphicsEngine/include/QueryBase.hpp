@@ -140,16 +140,19 @@ public:
 
     void OnEndQuery(DeviceContextImplType* pContext)
     {
-        if (this->m_Desc.Type != QUERY_TYPE_TIMESTAMP)
+        if (this->m_Desc.Type == QUERY_TYPE_TIMESTAMP)
         {
-            DEV_CHECK_ERR(m_State == QueryState::Querying,
-                          "Attempting to end query '", this->m_Desc.Name, "' that has not been begun.");
+            m_pContext = pContext;
+            m_State    = QueryState::Ended;
+            return;
         }
+
+        DEV_CHECK_ERR(m_State == QueryState::Querying,
+                      "Attempting to end query '", this->m_Desc.Name, "' that has not been begun.");
 
         if (m_pContext == nullptr)
         {
-            DEV_CHECK_ERR(this->m_Desc.Type == QUERY_TYPE_TIMESTAMP,
-                          "Ending query '", this->m_Desc.Name, "' that has not been begun.");
+            DEV_ERROR("Ending query '", this->m_Desc.Name, "' that has not been begun.");
             m_pContext = pContext;
         }
         else
