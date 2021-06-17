@@ -270,6 +270,22 @@ GraphicsAdapterInfo GetPhysicalDeviceGraphicsAdapterInfo(const VulkanUtilities::
 #endif
     }
 
+    // Compute shader properties
+    {
+        auto& CompProps{AdapterInfo.ComputeShader};
+        CompProps.SharedMemorySize        = vkDeviceProps.limits.maxComputeSharedMemorySize;
+        CompProps.MaxWorkGroupInvocations = vkDeviceProps.limits.maxComputeWorkGroupInvocations;
+        CompProps.MaxWorkGroupSizeX       = vkDeviceProps.limits.maxComputeWorkGroupSize[0];
+        CompProps.MaxWorkGroupSizeY       = vkDeviceProps.limits.maxComputeWorkGroupSize[1];
+        CompProps.MaxWorkGroupSizeZ       = vkDeviceProps.limits.maxComputeWorkGroupSize[2];
+        CompProps.MaxWorkGroupCountX      = vkDeviceProps.limits.maxComputeWorkGroupCount[0];
+        CompProps.MaxWorkGroupCountY      = vkDeviceProps.limits.maxComputeWorkGroupCount[1];
+        CompProps.MaxWorkGroupCountZ      = vkDeviceProps.limits.maxComputeWorkGroupCount[2];
+#if defined(_MSC_VER) && defined(_WIN64)
+        static_assert(sizeof(CompProps) == 32, "Did you add a new member to ComputeShaderProperties? Please initialize it here.");
+#endif
+    }
+
     // Set memory properties
     {
         auto& Mem{AdapterInfo.Memory};

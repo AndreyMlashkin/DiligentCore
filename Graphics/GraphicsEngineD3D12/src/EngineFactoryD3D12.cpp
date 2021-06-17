@@ -875,6 +875,22 @@ GraphicsAdapterInfo EngineFactoryD3D12Impl::GetGraphicsAdapterInfo(void*        
 #endif
     }
 
+    // Compute shader properties
+    {
+        auto& CompProps{AdapterInfo.ComputeShader};
+        CompProps.SharedMemorySize        = 32u << 10;
+        CompProps.MaxWorkGroupInvocations = D3D12_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+        CompProps.MaxWorkGroupSizeX       = D3D12_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+        CompProps.MaxWorkGroupSizeY       = D3D12_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+        CompProps.MaxWorkGroupSizeZ       = D3D12_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+        CompProps.MaxWorkGroupCountX      = D3D12_CS_THREAD_GROUP_MAX_X;
+        CompProps.MaxWorkGroupCountY      = D3D12_CS_THREAD_GROUP_MAX_Y;
+        CompProps.MaxWorkGroupCountZ      = D3D12_CS_THREAD_GROUP_MAX_Z;
+#if defined(_MSC_VER) && defined(_WIN64)
+        static_assert(sizeof(CompProps) == 32, "Did you add a new member to ComputeShaderProperties? Please initialize it here.");
+#endif
+    }
+
 #if defined(_MSC_VER) && defined(_WIN64)
     static_assert(sizeof(DeviceFeatures) == 37, "Did you add a new feature to DeviceFeatures? Please handle its satus here.");
 #endif
