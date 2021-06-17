@@ -1532,7 +1532,8 @@ enum RENDER_DEVICE_TYPE
     RENDER_DEVICE_TYPE_GL,             ///< OpenGL device 
     RENDER_DEVICE_TYPE_GLES,           ///< OpenGLES device
     RENDER_DEVICE_TYPE_VULKAN,         ///< Vulkan device
-    RENDER_DEVICE_TYPE_METAL           ///< Metal device (not yet implemented)
+    RENDER_DEVICE_TYPE_METAL,          ///< Metal device
+    RENDER_DEVICE_TYPE_COUNT           ///< Number of device types
 };
 
     
