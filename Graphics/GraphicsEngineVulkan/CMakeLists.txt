@@ -292,6 +292,9 @@ set(PUBLIC_DEPENDENCIES
     Diligent-GraphicsEngineVkInterface
 )
 
+message(private: ${PRIVATE_DEPENDENCIES})
+message(public:  ${PUBLIC_DEPENDENCIES})
+
 target_link_libraries(Diligent-GraphicsEngineVk-static
 PRIVATE
     ${PRIVATE_DEPENDENCIES}

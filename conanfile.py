@@ -33,15 +33,23 @@ class DiligentCoreConan(ConanFile):
         for patch in self.conan_data["patches"][self.version]:
             tools.patch(**patch)
 
+
+    @property
+    def _diligent_components(self):
+        opencv_components = [
+            {"target": "Diligent-GraphicsEngineVk-static",       "lib": "Diligent-GraphicsEngineVk-static", "requires": ["zlib::zlib"]}
+        ]
+
     def requirements(self):
-        self.requires("spirv-tools/2020.5")
-        self.requires("spirv-cross/20210115")
+        #self.requires("spirv-tools/2019.2")
+        #self.requires("spirv-cross/20200403")
         
-        #self.requires("vulkan-memory-allocator/2.3.0")
-        #self.requires("vulkan-loader/1.2.172")
-        #self.requires("vulkan-headers/1.2.172")
+        self.requires("vulkan-memory-allocator/2.3.0")
+        self.requires("vulkan-loader/1.2.172")
+        self.requires("vulkan-headers/1.2.172")
         
         self.requires("glew/2.2.0")
+        #self.requires("glslang/8.13.3559")
         
     def build(self):
         #self._patch_sources()
