@@ -49,6 +49,8 @@ class DiligentCoreConan(ConanFile):
         self.requires("vulkan-headers/1.2.172")
         
         self.requires("glew/2.2.0")
+        self.requires("stb/20200203")
+        self.requires("volk/1.2.170")
         #self.requires("glslang/8.13.3559")
         
     def build(self):
