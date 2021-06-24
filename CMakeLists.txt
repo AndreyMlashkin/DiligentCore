@@ -377,6 +377,3 @@ if(DILIGENT_INSTALL_CORE)
 
     install(FILES License.txt DESTINATION "Licenses" RENAME DiligentEngine-License.txt)
 endif(DILIGENT_INSTALL_CORE)
-
-# Create a custom target to run source code formatting validation command
-add_format_validation_target(DiligentCore "${CMAKE_CURRENT_SOURCE_DIR}" DiligentCore/BuildTools)
