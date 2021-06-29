@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.6)
 
 project(DiligentCore)
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
 conan_basic_setup()
 message(CONAN_LIBS: ${CONAN_LIBS})
 
