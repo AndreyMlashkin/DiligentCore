@@ -79,3 +79,7 @@ class DiligentCoreConan(ConanFile):
         cmake = self._configure_cmake()
         cmake.install()
         self.copy("License.txt", dst="licenses", src=self._source_subfolder)
+
+    def package_info(self):
+        self.cpp_info.libdirs = ["lib/Release"]
+        self.cpp_info.libs = tools.collect_libs(self)
