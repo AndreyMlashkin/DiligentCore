@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.6)
 
 project(DiligentCore)
 include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
-conan_basic_setup()
+conan_basic_setup(TARGETS)
 message(CONAN_LIBS: ${CONAN_LIBS})
 
 # Define GNU standard installation directories such as CMAKE_INSTALL_INCLUDEDIR, CMAKE_INSTALL_LIBDIR, etc.
@@ -172,7 +172,6 @@ else()
     endif()
     set(DILIGENT_BUILD_TESTS FALSE CACHE INTERNAL "Tests are not available on this platform" FORCE)
 endif()
-
 
 option(DILIGENT_NO_HLSL "Disable HLSL support in non-Direct3D backends" OFF)
 option(DILIGENT_NO_FORMAT_VALIDATION "Disable source code format validation" OFF)
