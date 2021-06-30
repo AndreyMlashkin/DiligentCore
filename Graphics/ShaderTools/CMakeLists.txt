@@ -133,21 +133,21 @@ endif()
 if(ENABLE_SPIRV)
     target_link_libraries(Diligent-ShaderTools 
     PRIVATE
-        spirv-cross-core
+        "CONAN_PKG::spirv-cross"
     )
 
     if (${USE_SPIRV_TOOLS})
         target_link_libraries(Diligent-ShaderTools 
         PRIVATE
-            SPIRV-Tools-opt
+            "CONAN_PKG::spirv-tools"
         )
     endif()
 
     if (${USE_GLSLANG})
         target_link_libraries(Diligent-ShaderTools 
         PRIVATE
-            SPIRV
-            glslang
+            "CONAN_PKG::spirv-tools"
+            "CONAN_PKG::glslang"
         )
 
         target_include_directories(Diligent-ShaderTools 

@@ -351,7 +351,7 @@ endif()
 
 include(BuildUtils.cmake)
 
-add_subdirectory(ThirdParty)
+#add_subdirectory(ThirdParty)
 add_subdirectory(BuildTools)
 add_subdirectory(Primitives)
 add_subdirectory(Platforms)

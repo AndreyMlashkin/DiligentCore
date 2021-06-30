@@ -16,7 +16,7 @@ class DiligentCoreConan(ConanFile):
     }
     default_options = {"shared": False, 
     "fPIC": True,
-    "with_glslang" : True
+    "with_glslang" : False
     }
     generators = "cmake_find_package", "cmake"
     exports_sources = ["*"]

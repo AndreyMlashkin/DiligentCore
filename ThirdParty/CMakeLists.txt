@@ -28,16 +28,7 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
         if(${DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF})
             set(SPIRV_CHECK_CONTEXT OFF CACHE BOOL "Do not check if the IR context is in a valid state")
         endif()
-        set(CMAKE_MACOSX_RPATH TRUE)
-        add_subdirectory(SPIRV-Tools)
-        set_directory_root_folder("SPIRV-Tools" "DiligentCore/ThirdParty/SPIRV-Tools")
-        # We only need SPIRV-Tools-opt for glslang that also depends on SPIRV-Tools-static.
-        # Exclude all other targets from the build to save build time
-        set(SPIRV_TOOLS_EXCLUDE_TARGETS SPIRV-Tools-link SPIRV-Tools-reduce SPIRV-Tools-shared)
-        set_target_properties(${SPIRV_TOOLS_EXCLUDE_TARGETS} PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
-
-        set(THIRD_PARTY_LIBS SPIRV-Tools-static SPIRV-Tools-opt)
-        install(FILES SPIRV-Tools/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME SPIRV-Tools-License.txt)
+        set(THIRD_PARTY_LIBS "CONAN_PKG::spirv-tools")
     endif()
 
     if(NOT ${DILIGENT_NO_GLSLANG})
@@ -51,8 +42,7 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
         # glslang "kindly" sets global CMAKE_DEBUG_POSTFIX to "d", which we have to unset now
         unset(CMAKE_DEBUG_POSTFIX CACHE)
 
-        list(APPEND THIRD_PARTY_LIBS GenericCodeGen glslang OGLCompiler OSDependent SPIRV HLSL MachineIndependent)
-        install(FILES glslang/LICENSE.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME GLSLang-License.txt)
+        list(APPEND THIRD_PARTY_LIBS "CONAN_PKG::glslang" "CONAN_PKG::spirv-tools")
     endif()
 
     set(SPIRV_CROSS_CLI OFF CACHE BOOL "Build the CLI binary. Requires SPIRV_CROSS_STATIC.")
@@ -71,34 +61,7 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
     add_subdirectory(SPIRV-Cross)
     set_directory_root_folder("SPIRV-Cross" "DiligentCore/ThirdParty/SPIRV-Cross")
 
-    list(APPEND THIRD_PARTY_LIBS spirv-cross-core)
-    if(METAL_SUPPORTED)
-        list(APPEND THIRD_PARTY_LIBS spirv-cross-msl spirv-cross-glsl)
-    endif()
-    install(FILES SPIRV-Cross/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME SPIRV-Cross-License.txt)
-
-    if(DILIGENT_INSTALL_CORE)
-        install(TARGETS ${THIRD_PARTY_LIBS}
-                ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-                LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-        )
-    endif()
-
-    if(${DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF} AND MSVC)
-        # Enable function inlining (/Ob1) in Debug build to improve shader compilation performance
-        foreach(TARGET ${THIRD_PARTY_LIBS}) 
-            target_compile_options(${TARGET} PRIVATE "$<$<CONFIG:DEBUG>:/Ob1>")
-        endforeach()
-    endif()
-
-    # Make sure that symbols do not leak out when third-party
-    # libs are linked into shared libraries
-    set_target_properties(${THIRD_PARTY_LIBS} PROPERTIES
-        CXX_VISIBILITY_PRESET hidden # -fvisibility=hidden
-        C_VISIBILITY_PRESET hidden # -fvisibility=hidden
-        VISIBILITY_INLINES_HIDDEN TRUE
-     )
+    list(APPEND THIRD_PARTY_LIBS "CONAN_PKG::spirv-cross")
 endif()
 
 if(${DILIGENT_BUILD_TESTS})
@@ -114,8 +77,3 @@ if(${DILIGENT_BUILD_TESTS})
      )
 endif()
 
-install(FILES googletest/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME googletest-License.txt)
-install(FILES stb/stb_image_write_license.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}")
-install(FILES volk/LICENSE.md DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME Volk-License.md)
-install(FILES DirectXShaderCompiler/LICENSE.TXT DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME DXC-License.txt)
-install(FILES DirectXShaderCompiler/ThirdPartyNotices.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME DXC-ThirdPartyNotices.txt)
