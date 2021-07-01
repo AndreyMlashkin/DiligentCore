@@ -3,7 +3,11 @@ cmake_minimum_required (VERSION 3.6)
 project(DiligentCore)
 include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
-message(CONAN_LIBS: ${CONAN_LIBS})
+    get_cmake_property(_variableNames VARIABLES)
+    list (SORT _variableNames)
+    foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+    endforeach()
 
 # Define GNU standard installation directories such as CMAKE_INSTALL_INCLUDEDIR, CMAKE_INSTALL_LIBDIR, etc.
 include(GNUInstallDirs)

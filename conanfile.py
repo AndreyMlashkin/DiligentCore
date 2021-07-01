@@ -16,7 +16,7 @@ class DiligentCoreConan(ConanFile):
     }
     default_options = {"shared": False, 
     "fPIC": True,
-    "with_glslang" : False
+    "with_glslang" : True
     }
     generators = "cmake_find_package", "cmake"
     exports_sources = ["*"]
@@ -54,10 +54,10 @@ class DiligentCoreConan(ConanFile):
 
         self.requires("spirv-headers/cci.20210526")
         self.requires("spirv-tools/cci.20210601")
-        self.requires("spirv-cross/cci.20210601")
+        self.requires("spirv-cross/cci.20210601", private=True)
         self.options["spirv-cross"].namespace = "diligent_spirv_cross"
 
-        #self.requires("glslang/8.13.3559")
+        self.requires("glslang/8.13.3559")
         
         self.requires("vulkan-memory-allocator/2.3.0")
         self.requires("vulkan-loader/1.2.172")
