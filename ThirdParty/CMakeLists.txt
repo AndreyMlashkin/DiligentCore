@@ -6,17 +6,16 @@ cmake_minimum_required (VERSION 3.6)
 # instead:
 set(CMAKE_POLICY_DEFAULT_CMP0063 NEW)
 
-if(PLATFORM_WIN32 OR PLATFORM_LINUX OR PLATFORM_MACOS)
-	add_subdirectory(glew)
-    if(DILIGENT_INSTALL_CORE)
-        install(TARGETS glew-static
-                ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-                LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-        )
-    endif()
-    install(FILES glew/LICENSE.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME GLEW-License.txt)
+# get GLEW using conan
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+   message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+   file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/master/conan.cmake"
+                  "${CMAKE_BINARY_DIR}/conan.cmake")
 endif()
+include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+conan_cmake_run(REQUIRES glew/2.2.0
+                BASIC_SETUP)
 
 if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
     # We only need to have SPIRV-Headers folder, but we
