@@ -112,3 +112,5 @@ class DiligentCoreConan(ConanFile):
         self.cpp_info.defines.append("SPIRV_CROSS_NAMESPACE_OVERRIDE=diligent_spirv_cross")
         if self.settings.os in ["Macos", "Linux"]:
             self.cpp_info.system_libs = ["dl", "pthread"]
+        if self.settings.os == 'Macos':
+            self.cpp_info.frameworks = ["CoreFoundation", 'Cocoa']
