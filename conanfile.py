@@ -20,7 +20,7 @@ class DiligentCoreConan(ConanFile):
     "with_glslang" : True
     }
     generators = "cmake_find_package", "cmake"
-    exports_sources = ["*", "!build/*", "!conanfile.py", "!doc/*", "!Tests/*"]
+    exports_sources = ["*", "!build/*", "!conanfile.py", "!doc/*", "!Tests/*", "!.github/*"]
     _cmake = None
     short_paths=True
 
@@ -91,14 +91,22 @@ class DiligentCoreConan(ConanFile):
         cmake.install()
         self.copy("License.txt", dst="licenses", src=self._source_subfolder)
         
-        self.copy("*.h", src="ThirdParty/")
+        #self.copy("*.h", src="ThirdParty/")
+        self.copy("*.hpp", src="ThirdParty/", dst="ThirdParty/")
+        self.copy("*.h", src="ThirdParty/", dst="ThirdParty/")
 
     def package_info(self):
         self.cpp_info.libdirs.append("lib/Release")
         self.cpp_info.libdirs.append("lib/Debug")
         self.cpp_info.includedirs.append('include')
+        self.cpp_info.includedirs.append('ThirdParty')
         self.cpp_info.includedirs.append('ThirdParty/glslang')
-        self.cpp_info.includedirs.append('ThirdParty/SPIRV-Cross')
+
+        self.cpp_info.includedirs.append('ThirdParty/SPIRV-Headers/include/')
+        self.cpp_info.includedirs.append('ThirdParty/SPIRV-Cross/')
+        self.cpp_info.includedirs.append('ThirdParty/SPIRV-Cross/include')
+        self.cpp_info.includedirs.append('ThirdParty/SPIRV-Tools/include')
+        self.cpp_info.includedirs.append('ThirdParty/Vulkan-Headers/include')
         
         self.cpp_info.libs = ['DiligentCore', 'MachineIndependent', 'glslang', 'HLSL', 'OGLCompiler', 'OSDependent', 'spirv-cross-core', 'SPIRV', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGen']
         self.cpp_info.defines.append("SPIRV_CROSS_NAMESPACE_OVERRIDE=diligent_spirv_cross")
