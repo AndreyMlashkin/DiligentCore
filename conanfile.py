@@ -96,8 +96,11 @@ class DiligentCoreConan(ConanFile):
         self.copy("*.h", src="ThirdParty/", dst="ThirdParty/")
 
     def package_info(self):
-        self.cpp_info.libdirs.append("lib/Release")
-        self.cpp_info.libdirs.append("lib/Debug")
+        if self.settings.build_type == "Debug":
+            self.cpp_info.libdirs.append("lib/Debug")
+        if self.settings.build_type == "Release":
+            self.cpp_info.libdirs.append("lib/Release")
+
         self.cpp_info.includedirs.append('include')
         self.cpp_info.includedirs.append('ThirdParty')
         self.cpp_info.includedirs.append('ThirdParty/glslang')
@@ -108,7 +111,13 @@ class DiligentCoreConan(ConanFile):
         self.cpp_info.includedirs.append('ThirdParty/SPIRV-Tools/include')
         self.cpp_info.includedirs.append('ThirdParty/Vulkan-Headers/include')
         
-        self.cpp_info.libs = ['DiligentCore', 'MachineIndependent', 'glslang', 'HLSL', 'OGLCompiler', 'OSDependent', 'spirv-cross-core', 'SPIRV', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGen']
+        if self.settings.os == "Windows":
+            if self.settings.build_type == "Debug":
+                self.cpp_info.libs = ['GraphicsEngineVk_64d', 'GraphicsEngineOpenGL_64d', 'DiligentCore', 'MachineIndependentd', 'glslangd', 'HLSLd', 'OGLCompilerd', 'OSDependentd', 'spirv-cross-cored', 'SPIRVd', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGend']
+            if self.settings.build_type == "Release":
+                self.cpp_info.libs = ['GraphicsEngineVk_64', 'GraphicsEngineOpenGL_64', 'DiligentCore', 'MachineIndependent', 'glslang', 'HLSL', 'OGLCompiler', 'OSDependent', 'spirv-cross-core', 'SPIRV', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGen']
+        else:
+            self.cpp_info.libs = ['DiligentCore', 'MachineIndependent', 'glslang', 'HLSL', 'OGLCompiler', 'OSDependent', 'spirv-cross-core', 'SPIRV', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGen']
         self.cpp_info.defines.append("SPIRV_CROSS_NAMESPACE_OVERRIDE=diligent_spirv_cross")
         if self.settings.os in ["Macos", "Linux"]:
             self.cpp_info.system_libs = ["dl", "pthread"]
