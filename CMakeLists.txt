@@ -2,6 +2,9 @@ cmake_minimum_required (VERSION 3.6)
 
 project(DiligentCore)
 
+include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
+conan_basic_setup()
+	
 # Define GNU standard installation directories such as CMAKE_INSTALL_INCLUDEDIR, CMAKE_INSTALL_LIBDIR, etc.
 include(GNUInstallDirs)
 
@@ -269,6 +272,26 @@ if(MSVC)
     # For instance, this way
     # target_compile_options(Diligent-BuildSettings INTERFACE "$<$<CONFIG:RELEASE>:/Ot>")
     # does not work as expected
+
+    message(CONAN_LINK_RUNTIME: "${CONAN_LINK_RUNTIME}")
+
+    if(CONAN_LINK_RUNTIME)
+        string(REPLACE "d" "" ${CONAN_LINK_RUNTIME} "${${CONAN_LINK_RUNTIME}}")
+        foreach(flag CMAKE_C_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELEASE
+                     CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO
+                     CMAKE_C_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_MINSIZEREL)
+            if(DEFINED ${flag})
+                string(REPLACE "/MD" ${CONAN_LINK_RUNTIME} ${flag} "${${flag}}")
+            endif()
+            message(STATUS "FLAG ${${flag}}: ${flag}")
+        endforeach()
+        foreach(flag CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG)
+            if(DEFINED ${flag})
+                string(REPLACE "/MDd" "${CONAN_LINK_RUNTIME}d" ${flag} "${${flag}}")
+            endif()
+            message(STATUS "FLAG ${${flag}}: ${flag}")
+        endforeach()
+    endif()
 else()
     # Todo: use __attribute__((always_inline)), but it needs to be defined in a header file
     target_compile_definitions(Diligent-BuildSettings INTERFACE __forceinline=inline)
