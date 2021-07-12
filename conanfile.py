@@ -4,7 +4,6 @@ from conans import ConanFile, tools, CMake
 
 class DiligentCoreConan(ConanFile):
     name = "diligent-core"
-    version = "2.5"
     url = "https://github.com/DiligentGraphics/DiligentCore/"
     homepage = "https://github.com/DiligentGraphics/DiligentCore/tree/v2.5"
     description = "Diligent Core is a modern cross-platfrom low-level graphics API."
