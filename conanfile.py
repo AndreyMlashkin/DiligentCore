@@ -84,6 +84,8 @@ class DiligentCoreConan(ConanFile):
         self._cmake.definitions["DILIGENT_NO_DIRECT3D12"] = True
         self._cmake.definitions["DILIGENT_NO_DXC"] = True
 
+        self._cmake.definitions["ENABLE_RTTI"] = True
+        self._cmake.definitions["ENABLE_EXCEPTIONS"] = True
         return self._cmake
 
     def build(self):
