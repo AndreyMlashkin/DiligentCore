@@ -84,7 +84,6 @@ class DiligentCoreConan(ConanFile):
         self._cmake.definitions["DILIGENT_NO_GLSLANG"] = not self.options.with_glslang
         self._cmake.definitions["DILIGENT_NO_DIRECT3D11"] = True
         self._cmake.definitions["DILIGENT_NO_DIRECT3D12"] = True
-        self._cmake.definitions["DILIGENT_NO_DXC"] = True
 
         self._cmake.definitions["ENABLE_RTTI"] = True
         self._cmake.definitions["ENABLE_EXCEPTIONS"] = True
@@ -106,11 +105,6 @@ class DiligentCoreConan(ConanFile):
         self.copy("*.h", src="ThirdParty/", dst="ThirdParty/")
 
     def package_info(self):
-        if self.settings.build_type == "Debug":
-            self.cpp_info.libdirs.append("lib/Debug")
-        if self.settings.build_type == "Release":
-            self.cpp_info.libdirs.append("lib/Release")
-
         self.cpp_info.includedirs.append('include')
         self.cpp_info.includedirs.append('ThirdParty')
         self.cpp_info.includedirs.append('ThirdParty/glslang')
@@ -133,3 +127,13 @@ class DiligentCoreConan(ConanFile):
             self.cpp_info.system_libs = ["dl", "pthread"]
         if self.settings.os == 'Macos':
             self.cpp_info.frameworks = ["CoreFoundation", 'Cocoa']
+
+        if self.settings.build_type == "Debug":
+            self.cpp_info.libdirs.append("lib/Debug")
+            bin_path = os.path.join(self.package_folder, "bin/Debug")
+        if self.settings.build_type == "Release":
+            self.cpp_info.libdirs.append("lib/Release")
+            bin_path = os.path.join(self.package_folder, "bin/Release")
+
+        self.output.info("Appending PATH environment variable: {}".format(bin_path))
+        self.env_info.PATH.append(bin_path)
