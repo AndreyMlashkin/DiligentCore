@@ -2,9 +2,12 @@ cmake_minimum_required (VERSION 3.6)
 
 project(DiligentCore)
 
-include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
-conan_basic_setup()
-	
+option(BUILD_WITH_CONAN "Build with conan" OFF)
+if(BUILD_WITH_CONAN)
+  include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
+  conan_basic_setup()
+endif(BUILD_WITH_CONAN)
+
 # Define GNU standard installation directories such as CMAKE_INSTALL_INCLUDEDIR, CMAKE_INSTALL_LIBDIR, etc.
 include(GNUInstallDirs)
 
@@ -254,7 +257,7 @@ if(MSVC)
         string(FIND "${CMAKE_CXX_FLAGS}" "/GR" MSVC_HAS_GR)
         if(MSVC_HAS_GR)
             string(REGEX REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-	        message("GR set to -")
+            message("GR set to -")
         else(MSVC_HAS_GR)
             add_compile_options(/GR-) # Disable RTTI
         endif(MSVC_HAS_GR)

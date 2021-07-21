@@ -76,6 +76,8 @@ class DiligentCoreConan(ConanFile):
         if self._cmake:
             return self._cmake
         self._cmake = CMake(self)
+
+        self._cmake.definitions["BUILD_WITH_CONAN"] = True
         self._cmake.definitions["DILIGENT_BUILD_SAMPLES"] = False
         self._cmake.definitions["DILIGENT_NO_FORMAT_VALIDATION"] = True
         self._cmake.definitions["DILIGENT_BUILD_TESTS"] = False
