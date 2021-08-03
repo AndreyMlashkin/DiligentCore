@@ -124,8 +124,11 @@ class DiligentCoreConan(ConanFile):
                 self.cpp_info.libs = ['GraphicsEngineVk_64d', 'GraphicsEngineOpenGL_64d', 'DiligentCore', 'MachineIndependentd', 'glslangd', 'HLSLd', 'OGLCompilerd', 'OSDependentd', 'spirv-cross-cored', 'SPIRVd', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGend']
             if self.settings.build_type == "Release":
                 self.cpp_info.libs = ['GraphicsEngineVk_64r', 'GraphicsEngineOpenGL_64r', 'DiligentCore', 'MachineIndependent', 'glslang', 'HLSL', 'OGLCompiler', 'OSDependent', 'spirv-cross-core', 'SPIRV', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGen']
-        else:
+        elif self.settings.os == "Macos" or self.settings.os == "Linux":
             self.cpp_info.libs = ['DiligentCore', 'MachineIndependent', 'glslang', 'HLSL', 'OGLCompiler', 'OSDependent', 'spirv-cross-core', 'SPIRV', 'SPIRV-Tools-opt', 'SPIRV-Tools', 'glew-static', 'GenericCodeGen']
+        else:
+            self.cpp_info.libs = tools.collect_libs(self)
+
         self.cpp_info.defines.append("SPIRV_CROSS_NAMESPACE_OVERRIDE=diligent_spirv_cross")
         if self.settings.os in ["Macos", "Linux"]:
             self.cpp_info.system_libs = ["dl", "pthread"]
