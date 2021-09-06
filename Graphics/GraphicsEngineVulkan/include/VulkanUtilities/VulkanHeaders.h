@@ -37,7 +37,7 @@
 #define VK_FORMAT_RANGE_SIZE (VK_FORMAT_ASTC_12x12_SRGB_BLOCK - VK_FORMAT_UNDEFINED + 1)
 
 #if DILIGENT_USE_VOLK
-#    include "volk/volk.h"
+#    include "volk.h"
 #endif
 
 #ifdef _WINBASE_
