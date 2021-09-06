@@ -60,9 +60,10 @@ class DiligentCoreConan(ConanFile):
         self.requires("zlib/1.2.11")
         self.requires("libpng/1.6.37")
 
-        #self.requires("vulkan-memory-allocator/2.3.0")
-        #self.requires("vulkan-loader/1.2.172")
-        #self.requires("vulkan-headers/1.2.172")
+        self.requires("vulkan-memory-allocator/2.3.0")
+        self.requires("vulkan-loader/1.2.172")
+        self.requires("vulkan-headers/1.2.172")
+        self.requires("volk/1.2.170")
 
         self.requires("glew/2.2.0")
         #self.requires("stb/20200203")
