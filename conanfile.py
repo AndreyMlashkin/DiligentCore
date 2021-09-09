@@ -62,6 +62,7 @@ class DiligentCoreConan(ConanFile):
 
         self.requires("vulkan-memory-allocator/2.3.0")
         self.requires("vulkan-loader/1.2.182")
+        self.options["vulkan-loader"].shared = True # Static build is forbidden for this package
         self.requires("vulkan-headers/1.2.182")
         self.requires("volk/1.2.182")
 
