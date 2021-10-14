@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 3.6)
 
 project(DiligentCore)
+include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
+conan_basic_setup()
 
 # Define GNU standard installation directories such as CMAKE_INSTALL_INCLUDEDIR, CMAKE_INSTALL_LIBDIR, etc.
 include(GNUInstallDirs)
@@ -427,7 +429,7 @@ add_subdirectory(Primitives)
 add_subdirectory(Platforms)
 add_subdirectory(Common)
 add_subdirectory(Graphics)
-add_subdirectory(Tests)
+#add_subdirectory(Tests)
 
 
 # Installation instructions
