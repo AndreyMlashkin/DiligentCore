@@ -25,8 +25,6 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
     #set_directory_root_folder("SPIRV-Headers" "ThirdParty/DiligentCore/SPIRV-Headers")
     install(FILES SPIRV-Headers/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME SPIRV-Headers-License.txt)
 
-    install(FILES Vulkan-Headers/LICENSE.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME Vulkan-Headers-License.txt)
-
     option(DILIGENT_NO_GLSLANG "Do NOT build glslang compiler" OFF)
     option(DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF "Enable some optimizations for SPIRV-Tools, glslang, SPIRV-Cross and related projects in debug build to improve performance" ON)
 
@@ -80,22 +78,6 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
     set(SPIRV_CROSS_FORCE_PIC ON CACHE BOOL "Force position-independent code.")
     set(SPIRV_CROSS_SKIP_INSTALL ON CACHE BOOL "Skip SPIRV-Cross installation.")
     set(SPIRV_CROSS_NAMESPACE_OVERRIDE diligent_spirv_cross CACHE STRING "Override the namespace used in the C++ API.")
-    add_subdirectory(SPIRV-Cross)
-    set_directory_root_folder("SPIRV-Cross" "DiligentCore/ThirdParty/SPIRV-Cross")
-
-    list(APPEND THIRD_PARTY_LIBS spirv-cross-core)
-    if(METAL_SUPPORTED)
-        list(APPEND THIRD_PARTY_LIBS spirv-cross-msl spirv-cross-glsl)
-    endif()
-    install(FILES SPIRV-Cross/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME SPIRV-Cross-License.txt)
-
-    if(DILIGENT_INSTALL_CORE)
-        install(TARGETS ${THIRD_PARTY_LIBS}
-                ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-                LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}/${DILIGENT_CORE_DIR}/$<CONFIG>"
-        )
-    endif()
 
     if(${DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF} AND MSVC)
         # Enable function inlining (/Ob1) in Debug build to improve shader compilation performance
@@ -104,6 +86,7 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
         endforeach()
     endif()
 
+	list(APPEND THIRD_PARTY_LIBS CONAN_PKG::spirv-cross)
     # Make sure that symbols do not leak out when third-party
     # libs are linked into shared libraries
     set_target_properties(${THIRD_PARTY_LIBS} PROPERTIES
@@ -126,7 +109,6 @@ if(${DILIGENT_BUILD_GOOGLE_TEST})
      )
 endif()
 
-install(FILES googletest/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME googletest-License.txt)
 install(FILES stb/stb_image_write_license.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}")
 install(FILES volk/LICENSE.md DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME Volk-License.md)
 install(FILES DirectXShaderCompiler/LICENSE.TXT DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME DXC-License.txt)

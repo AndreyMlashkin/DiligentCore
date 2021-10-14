@@ -133,7 +133,7 @@ endif()
 if(ENABLE_SPIRV)
     target_link_libraries(Diligent-ShaderTools
     PRIVATE
-        spirv-cross-core
+        CONAN_PKG::spirv-cross
     )
 
     if (${USE_SPIRV_TOOLS})

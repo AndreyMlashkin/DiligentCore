@@ -59,7 +59,10 @@ class DiligentCoreConan(ConanFile):
         self.requires("libtiff/4.3.0")
         self.requires("zlib/1.2.11")
         self.requires("libpng/1.6.37")
-       
+
+        self.requires("spirv-cross/diligent-2.5@andrei/test")
+        self.options["spirv-cross"].namespace = "diligent_spirv_cross"
+
         if self.settings.os in ["Linux", "FreeBSD"]:
             self.requires("xorg/system")
             if not tools.cross_building(self, skip_x64_x86=True):
