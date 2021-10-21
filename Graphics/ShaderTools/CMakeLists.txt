@@ -147,12 +147,12 @@ if(ENABLE_SPIRV)
         target_link_libraries(Diligent-ShaderTools
         PRIVATE
             CONAN_PKG::spirv-tools
-            glslang
+            CONAN_PKG::glslang
         )
 
         target_include_directories(Diligent-ShaderTools
         PRIVATE
-            ../../ThirdParty/glslang
+            ${CONAN_INCLUDE_DIRS_GLSLANG}/glslang/
         )
     endif()
 endif()

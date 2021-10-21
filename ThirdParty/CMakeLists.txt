@@ -49,14 +49,9 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
         set(ENABLE_SPVREMAPPER OFF CACHE BOOL "Do not build SPIRV remapper")
         set(SKIP_GLSLANG_INSTALL ON CACHE BOOL "Skip glslang installation")
         set(ENABLE_CTEST OFF CACHE BOOL "Disable testing")
-        add_subdirectory(glslang)
-        set_directory_root_folder("glslang" "DiligentCore/ThirdParty/glslang")
 
         # glslang "kindly" sets global CMAKE_DEBUG_POSTFIX to "d", which we have to unset now
         unset(CMAKE_DEBUG_POSTFIX CACHE)
-
-        list(APPEND THIRD_PARTY_LIBS GenericCodeGen glslang OGLCompiler OSDependent SPIRV HLSL MachineIndependent)
-        install(FILES glslang/LICENSE.txt DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME GLSLang-License.txt)
     endif()
 
     set(SPIRV_CROSS_CLI OFF CACHE BOOL "Build the CLI binary. Requires SPIRV_CROSS_STATIC.")
@@ -73,13 +68,7 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
     set(SPIRV_CROSS_SKIP_INSTALL ON CACHE BOOL "Skip SPIRV-Cross installation.")
     set(SPIRV_CROSS_NAMESPACE_OVERRIDE diligent_spirv_cross CACHE STRING "Override the namespace used in the C++ API.")
 
-    if(${DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF} AND MSVC)
-        # Enable function inlining (/Ob1) in Debug build to improve shader compilation performance
-        foreach(TARGET ${THIRD_PARTY_LIBS})
-            target_compile_options(${TARGET} PRIVATE "$<$<CONFIG:DEBUG>:/Ob1>")
-        endforeach()
-    endif()
-    list(APPEND THIRD_PARTY_LIBS CONAN_PKG::spirv-tools CONAN_PKG::spirv-cross)
+    list(APPEND THIRD_PARTY_LIBS CONAN_PKG::spirv-tools CONAN_PKG::spirv-cross CONAN_PKG::glslang)
 
     # Make sure that symbols do not leak out when third-party
     # libs are linked into shared libraries
