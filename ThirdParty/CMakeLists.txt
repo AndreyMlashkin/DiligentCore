@@ -23,7 +23,6 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
     # do not really need any target from the project.
     #add_subdirectory(SPIRV-Headers)
     #set_directory_root_folder("SPIRV-Headers" "ThirdParty/DiligentCore/SPIRV-Headers")
-    install(FILES SPIRV-Headers/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME SPIRV-Headers-License.txt)
 
     option(DILIGENT_NO_GLSLANG "Do NOT build glslang compiler" OFF)
     option(DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF "Enable some optimizations for SPIRV-Tools, glslang, SPIRV-Cross and related projects in debug build to improve performance" ON)
@@ -39,15 +38,10 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
             set(SPIRV_CHECK_CONTEXT OFF CACHE BOOL "Do not check if the IR context is in a valid state")
         endif()
         set(CMAKE_MACOSX_RPATH TRUE)
-        add_subdirectory(SPIRV-Tools)
-        set_directory_root_folder("SPIRV-Tools" "DiligentCore/ThirdParty/SPIRV-Tools")
         # We only need SPIRV-Tools-opt for glslang that also depends on SPIRV-Tools-static.
         # Exclude all other targets from the build to save build time
-        set(SPIRV_TOOLS_EXCLUDE_TARGETS SPIRV-Tools-link SPIRV-Tools-reduce SPIRV-Tools-shared)
-        set_target_properties(${SPIRV_TOOLS_EXCLUDE_TARGETS} PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 
-        set(THIRD_PARTY_LIBS SPIRV-Tools-static SPIRV-Tools-opt)
-        install(FILES SPIRV-Tools/LICENSE DESTINATION "Licenses/ThirdParty/${DILIGENT_CORE_DIR}" RENAME SPIRV-Tools-License.txt)
+        #set(THIRD_PARTY_LIBS CONAN_PKG::spirv-tools)
     endif()
 
     if(NOT ${DILIGENT_NO_GLSLANG})
@@ -81,12 +75,12 @@ if(VULKAN_SUPPORTED OR METAL_SUPPORTED)
 
     if(${DILIGENT_IMPROVE_SPIRV_TOOLS_DEBUG_PERF} AND MSVC)
         # Enable function inlining (/Ob1) in Debug build to improve shader compilation performance
-        foreach(TARGET ${THIRD_PARTY_LIBS}) 
+        foreach(TARGET ${THIRD_PARTY_LIBS})
             target_compile_options(${TARGET} PRIVATE "$<$<CONFIG:DEBUG>:/Ob1>")
         endforeach()
     endif()
+    list(APPEND THIRD_PARTY_LIBS CONAN_PKG::spirv-tools CONAN_PKG::spirv-cross)
 
-	list(APPEND THIRD_PARTY_LIBS CONAN_PKG::spirv-cross)
     # Make sure that symbols do not leak out when third-party
     # libs are linked into shared libraries
     set_target_properties(${THIRD_PARTY_LIBS} PROPERTIES

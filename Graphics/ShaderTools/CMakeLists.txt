@@ -139,14 +139,14 @@ if(ENABLE_SPIRV)
     if (${USE_SPIRV_TOOLS})
         target_link_libraries(Diligent-ShaderTools
         PRIVATE
-            SPIRV-Tools-opt
+            CONAN_PKG::spirv-tools
         )
     endif()
 
     if (${USE_GLSLANG})
         target_link_libraries(Diligent-ShaderTools
         PRIVATE
-            SPIRV
+            CONAN_PKG::spirv-tools
             glslang
         )
 
